@@ -14,7 +14,14 @@ namespace AINews.Domain.Entities
         public DateTime EventDate { get; set; }
         public string Location { get; set; }
         public string ImageUrl { get; set; }
+
+        // Event Cateogry relationships 
         public int CategoryId { get; set; }
         public EventCategory EventCategory { get; set; }
+
+
+        // User relationships (using Domain User ID)
+        public Guid CreatedById { get; set; } 
+        public User? CreatedBy { get; set; }  // Navigation property
     }
 }

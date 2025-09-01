@@ -1,4 +1,5 @@
 ﻿using AINews.Domain.Entities;
+using AINews.Persistance.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,29 +15,53 @@ namespace AINews.Persistance
         {
 
         }
-
-        public DbSet<Article> Articles { get; set; }
-        public DbSet<Event> Events { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Article> Article { get; set; }
+        public DbSet<Event> Event { get; set; }
+        public DbSet<ArticleCategory> ArticleCategory { get; set; }
+        public DbSet<EventCategory> EventCategory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var categoryGuid = Guid.Parse("{B0788D2F-8003-43C1-92A4-EDC76A7C5DDE}");
-            var articleGuid = Guid.Parse("{6313179F-7837-473A-A4D5-A5571B43E6A6}");
-            modelBuilder.Entity<ArticleCategory>().HasData(new ArticleCategory
+            base.OnModelCreating(modelBuilder);
+
+            // Configure Domain User relationships
+            modelBuilder.Entity<Article>(entity =>
             {
-                Id = categoryGuid,
-                Name = "Technology"
+                entity.HasKey(a => a.Id);
+
+                entity.HasOne(a => a.Author)
+                    .WithMany(u => u.Articles)
+                    .HasForeignKey(a => a.AuthorId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(a => a.ArticleCategory)
+                    .WithMany()
+                    .HasForeignKey(a => a.CategoryId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<Article>().HasData(new Article
+            modelBuilder.Entity<Event>(entity =>
             {
-                Id = articleGuid,
-                Title = "Morocco to Develop AI Model to Simplify Government Services",
-                Content = "Rabat — Morocco plans to create an artificial intelligence (AI) model that will make government content easier to understand and handle citizen complaints through chatbots, the country’s digital transition minister Amal El Fallah Seghrouchni announced on Monday.\r\n\r\nSeghrouchni outlined details during the question session at the House of Representatives, detailing that the AI project is part of several initiatives her department has launched.\r\n\r\nShe revealed that the ministry is also working on a digital administration law, specifically including provisions related to AI, focusing on data protection and system security.",
-                ImageUrl = "https://www.moroccoworldnews.com/wp-content/uploads/2025/07/Morocco-to-Develop-AI-Model-to-Simplify-Government-Services.webp",
-                CategoryId = categoryGuid
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.CreatedBy)
+                    .WithMany(u => u.Events)
+                    .HasForeignKey(e => e.CreatedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.EventCategory)
+                    .WithMany()
+                    .HasForeignKey(e => e.CategoryId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
+            // Configure Domain User
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(u => u.Id);
+                entity.HasIndex(u => u.Email).IsUnique();
+            });
         }
     }
 }

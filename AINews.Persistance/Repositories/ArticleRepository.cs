@@ -18,14 +18,14 @@ namespace AINews.Persistance.Repositories
         public async Task<IReadOnlyList<Article>> GetAllArticlesAsync(bool includeCategory)
         {
             List<Article> allArticles = new List<Article>();
-            allArticles = includeCategory ? await _dbContext.Articles.Include(x => x.Category).ToListAsync() : await _dbContext.Articles.ToListAsync();
+            allArticles = includeCategory ? await _dbContext.Article.Include(x => x.ArticleCategory).ToListAsync() : await _dbContext.Article.ToListAsync();
             return allArticles;
         }
 
         public async Task<Article> GetArticleByIdAsync(Guid id, bool includeCategory)
         {
             Article article = new Article();
-            article = includeCategory ? await _dbContext.Articles.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id) : await GetByIdAsync(id);
+            article = includeCategory ? await _dbContext.Article.Include(x => x.ArticleCategory).FirstOrDefaultAsync(x => x.Id == id) : await GetByIdAsync(id);
             return article;
         }
 

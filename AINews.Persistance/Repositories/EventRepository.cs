@@ -18,14 +18,14 @@ namespace AINews.Persistance.Repositories
         public async Task<IReadOnlyList<Event>> GetAllEventsAsync(bool includeCategory)
         {
             List<Event> allEvents = new List<Event>();
-            allEvents = includeCategory ? await _dbContext.Events.Include(x => x.EventCategory).ToListAsync() : await _dbContext.Events.ToListAsync();
+            allEvents = includeCategory ? await _dbContext.Event.Include(x => x.EventCategory).ToListAsync() : await _dbContext.Event.ToListAsync();
             return allEvents;
         }
 
         public async Task<Event> GetEventByIdAsync(Guid id, bool includeCategory)
         {
             Event eventobj = new Event();
-            eventobj = includeCategory ? await _dbContext.Events.Include(x => x.EventCategory).FirstOrDefaultAsync(x => x.Id == id) : await GetByIdAsync(id);
+            eventobj = includeCategory ? await _dbContext.Event.Include(x => x.EventCategory).FirstOrDefaultAsync(x => x.Id == id) : await GetByIdAsync(id);
             return eventobj;
         }
 
