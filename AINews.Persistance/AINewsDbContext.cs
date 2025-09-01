@@ -1,5 +1,6 @@
 ﻿using AINews.Domain.Entities;
 using AINews.Persistance.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AINews.Persistance
 {
-    public class AINewsDbContext : DbContext
+    public class AINewsDbContext : IdentityDbContext<ApplicationUser>
     {
         public AINewsDbContext(DbContextOptions<AINewsDbContext> options) : base(options)
         {
