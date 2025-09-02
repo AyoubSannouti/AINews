@@ -16,7 +16,7 @@ namespace AINews.Domain.Entities
         public string ImageUrl { get; set; }
 
         // Event Cateogry relationships 
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public EventCategory EventCategory { get; set; }
 
 
