@@ -10,43 +10,25 @@ using System.Threading.Tasks;
 
 namespace AINews.Application.Features.Authentication.Commands.Login
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandResponse>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResultDto>
     {
-        private readonly IUserService _userService;
-        public LoginCommandHandler(IUserService userService)
+        private readonly IIdentityService _identity;
+        private readonly IJwtTokenGenerator _jwt;
+        public LoginCommandHandler(IIdentityService identity, IJwtTokenGenerator jwt)
         {
-            _userService = userService;
+            _identity = identity;
+            _jwt = jwt;
         }
 
-        public async Task<LoginCommandResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<AuthResultDto> Handle(LoginCommand request, CancellationToken ct)
         {
-            var (user, token) = await _userService.AuthenticateAsync(request.Email, request.Password);
+            var (success, userId, email, userName, errors) =
+                await _identity.LoginAsync(request.Email, request.Password);
 
-            if (user == null || token == null)
-            {
-                return new LoginCommandResponse
-                {
-                    Success = false,
-                    Message = "Invalid email or password"
-                };
-            }
+            if (!success)
+                throw new Exception(string.Join(", ", errors));
 
-            // Update last login
-            await _userService.UpdateLastLoginAsync(user.Id);
-
-            return new LoginCommandResponse
-            {
-                Success = true,
-                Message = "Login successful",
-                Token = token,
-                User = new UserDto
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName
-                }
-            };
+            return _jwt.Generate(userId, email, userName);
         }
     }
 }

@@ -26,12 +26,6 @@ namespace AINews.Application.Profiles
             CreateMap<Event, GetEventDetailViewModel>().ReverseMap();
             CreateMap<Event, CreateEventCommand>().ReverseMap(); 
             CreateMap<Event, UpdateEventCommand>().ReverseMap();
-
-            CreateMap<User, AuthenticatedUserDto>().ReverseMap();
-            CreateMap<User, CreateUserDto>().ReverseMap();
-            CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<User, RegisterCommand>().ReverseMap();
-            CreateMap<User, LoginCommand>().ReverseMap();
         }
     }
 }

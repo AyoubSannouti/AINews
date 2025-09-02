@@ -19,9 +19,6 @@ namespace AINews.Domain.Entities
         public Guid CategoryId { get; set; }
         public EventCategory EventCategory { get; set; }
 
-
-        // User relationships (using Domain User ID)
         public string CreatedById { get; set; } 
-        public User? CreatedBy { get; set; }  // Navigation property
     }
 }

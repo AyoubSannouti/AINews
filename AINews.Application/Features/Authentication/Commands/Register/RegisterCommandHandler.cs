@@ -8,46 +8,28 @@ using System.Threading.Tasks;
 
 namespace AINews.Application.Features.Authentication.Commands.Register
 {
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterCommandResponse>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthResultDto>
     {
-        private readonly IUserService _userService;
+        private readonly IIdentityService _identity;
+        private readonly IJwtTokenGenerator _jwt;
 
-        public RegisterCommandHandler(IUserService userService)
+        public RegisterCommandHandler(IIdentityService identity, IJwtTokenGenerator jwt)
         {
-            _userService = userService;
+            _identity = identity;
+            _jwt = jwt;
         }
 
-        public async Task<RegisterCommandResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<AuthResultDto> Handle(RegisterCommand request, CancellationToken ct)
         {
-            try
-            {
-                var createUserDto = new CreateUserDto
-                {
-                    Email = request.Email,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    Password = request.Password
-                };
+            var (success, userId, email, userName, errors) =
+                await _identity.RegisterAsync(request.Email, request.Password);
 
-                var (domainUser, token) = await _userService.CreateUserAsync(createUserDto);
+            if (!success)
+                throw new Exception(string.Join(", ", errors));
 
-                return new RegisterCommandResponse
-                {
-                    Success = true,
-                    Message = "User registered successfully",
-                    Token = token
-                };
-            }
-            catch (InvalidOperationException ex)
-            {
-                return new RegisterCommandResponse
-                {
-                    Success = false,
-                    Message = "Registration failed",
-                    Errors = new List<string> { ex.Message }
-                };
-            }
+            return _jwt.Generate(userId, email, userName);
         }
+
     }
 
 }
