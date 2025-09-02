@@ -1,4 +1,5 @@
 ﻿using AINews.Application.Contracts;
+using AINews.Persistance.Data;
 using AINews.Persistance.Identity;
 using AINews.Persistance.Repositories;
 using Microsoft.AspNetCore.Identity;

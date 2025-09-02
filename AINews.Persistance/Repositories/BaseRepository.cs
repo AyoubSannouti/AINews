@@ -1,4 +1,5 @@
 ﻿using AINews.Application.Contracts;
+using AINews.Persistance.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AINews.Persistance
+namespace AINews.Persistance.Data
 {
     public class AINewsDbContext : IdentityDbContext<ApplicationUser>
     {
