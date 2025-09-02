@@ -21,7 +21,7 @@ namespace AINews.Domain.Entities
 
 
         // User relationships (using Domain User ID)
-        public Guid CreatedById { get; set; } 
+        public string CreatedById { get; set; } 
         public User? CreatedBy { get; set; }  // Navigation property
     }
 }

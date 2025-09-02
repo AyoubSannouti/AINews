@@ -17,7 +17,7 @@ namespace AINews.Domain.Entities
         public ArticleCategory ArticleCategory { get; set; }
 
         // User relationships (using Domain User ID)
-        public Guid AuthorId { get; set; }
+        public string AuthorId { get; set; }
         public User? Author { get; set; }  // Navigation property
     }
 }
