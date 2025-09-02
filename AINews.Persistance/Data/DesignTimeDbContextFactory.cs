@@ -23,7 +23,7 @@ namespace AINews.Persistance.Data
             .Build();
 
         var cs = config.GetConnectionString("DefaultConnection")
-                 ?? "Server=.;Database=AINewsDb;Trusted_Connection=True;TrustServerCertificate=True";
+                 ?? "Server=LAPTOP-O9OS8SGP\\SQLEXPRESS;Database=AINewsDb;MultipleActiveResultSets=true;TrustServerCertificate=Yes;Trusted_Connection=True;";
 
         var options = new DbContextOptionsBuilder<AINewsDbContext>()
             .UseSqlServer(cs)
