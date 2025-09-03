@@ -1,6 +1,8 @@
 
-using AINews.Persistance;
 using AINews.Application;
+using AINews.Persistance;
+using AINews.Persistance.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace AINews.Api
 {
@@ -27,6 +29,8 @@ namespace AINews.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            IdentitySeeder.SeedAsync(app.Services, builder.Configuration).GetAwaiter().GetResult();
 
             app.UseHttpsRedirection();
 

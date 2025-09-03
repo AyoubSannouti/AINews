@@ -1,4 +1,5 @@
 ﻿using AINews.Application.Contracts;
+using AINews.Application.Features.Authentication;
 using AINews.Persistance.Data;
 using AINews.Persistance.Identity;
 using AINews.Persistance.Repositories;
@@ -66,7 +67,13 @@ namespace AINews.Persistance
                 };
             });
 
-            //services.AddAuthorization();
+            services.AddAuthorization();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CanManageCategories", policy =>
+                    policy.RequireRole(Roles.Admin));
+            });
 
             // Identity abstraction + JWT generator (no ApplicationUser in Application layer)
             services.AddScoped<IIdentityService, IdentityService>();
