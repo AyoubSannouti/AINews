@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AINews.Application.Features.Articles.Commands.DeleteArticle
 {
-    internal class DeleteArticleCommandHandler : IRequestHandler<DeleteArticleCommand>
+    public class DeleteArticleCommandHandler : IRequestHandler<DeleteArticleCommand>
     {
         private readonly IArticleRepository _articleRepository;
 

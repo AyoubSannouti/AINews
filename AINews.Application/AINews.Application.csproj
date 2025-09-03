@@ -22,4 +22,10 @@
     <ProjectReference Include="..\AINews.Domain\AINews.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\ArticleCategories\Queries\" />
+    <Folder Include="Features\EventCategory\Command\" />
+    <Folder Include="Features\EventCategory\Queries\" />
+  </ItemGroup>
+
 </Project>
