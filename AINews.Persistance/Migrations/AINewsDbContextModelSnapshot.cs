@@ -28,9 +28,6 @@ namespace AINews.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ArticleCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("AuthorId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -51,17 +48,16 @@ namespace AINews.Persistance.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ArticleCategoryId");
 
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Article");
+                    b.ToTable("Article", (string)null);
                 });
 
             modelBuilder.Entity("AINews.Domain.Entities.ArticleCategory", b =>
@@ -72,11 +68,12 @@ namespace AINews.Persistance.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ArticleCategory");
+                    b.ToTable("ArticleCategory", (string)null);
                 });
 
             modelBuilder.Entity("AINews.Domain.Entities.Event", b =>
@@ -96,9 +93,6 @@ namespace AINews.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("EventCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("EventDate")
                         .HasColumnType("datetime2");
 
@@ -112,7 +106,8 @@ namespace AINews.Persistance.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -120,9 +115,7 @@ namespace AINews.Persistance.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.HasIndex("EventCategoryId");
-
-                    b.ToTable("Event");
+                    b.ToTable("Event", (string)null);
                 });
 
             modelBuilder.Entity("AINews.Domain.Entities.EventCategory", b =>
@@ -133,49 +126,12 @@ namespace AINews.Persistance.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("EventCategory");
-                });
-
-            modelBuilder.Entity("AINews.Domain.Entities.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("User");
+                    b.ToTable("EventCategory", (string)null);
                 });
 
             modelBuilder.Entity("AINews.Persistance.Identity.ApplicationUser", b =>
@@ -203,9 +159,6 @@ namespace AINews.Persistance.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("datetime2");
@@ -395,46 +348,34 @@ namespace AINews.Persistance.Migrations
 
             modelBuilder.Entity("AINews.Domain.Entities.Article", b =>
                 {
-                    b.HasOne("AINews.Domain.Entities.ArticleCategory", null)
-                        .WithMany("Articles")
-                        .HasForeignKey("ArticleCategoryId");
-
-                    b.HasOne("AINews.Domain.Entities.User", "Author")
-                        .WithMany("Articles")
+                    b.HasOne("AINews.Persistance.Identity.ApplicationUser", null)
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AINews.Domain.Entities.ArticleCategory", "ArticleCategory")
-                        .WithMany()
+                        .WithMany("Articles")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ArticleCategory");
-
-                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("AINews.Domain.Entities.Event", b =>
                 {
                     b.HasOne("AINews.Domain.Entities.EventCategory", "EventCategory")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AINews.Domain.Entities.User", "CreatedBy")
-                        .WithMany("Events")
+                    b.HasOne("AINews.Persistance.Identity.ApplicationUser", null)
+                        .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("AINews.Domain.Entities.EventCategory", null)
-                        .WithMany("Events")
-                        .HasForeignKey("EventCategoryId");
-
-                    b.Navigation("CreatedBy");
 
                     b.Navigation("EventCategory");
                 });
@@ -497,13 +438,6 @@ namespace AINews.Persistance.Migrations
 
             modelBuilder.Entity("AINews.Domain.Entities.EventCategory", b =>
                 {
-                    b.Navigation("Events");
-                });
-
-            modelBuilder.Entity("AINews.Domain.Entities.User", b =>
-                {
-                    b.Navigation("Articles");
-
                     b.Navigation("Events");
                 });
 #pragma warning restore 612, 618

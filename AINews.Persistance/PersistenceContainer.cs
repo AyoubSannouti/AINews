@@ -66,7 +66,7 @@ namespace AINews.Persistance
                 };
             });
 
-            services.AddAuthorization();
+            //services.AddAuthorization();
 
             // Identity abstraction + JWT generator (no ApplicationUser in Application layer)
             services.AddScoped<IIdentityService, IdentityService>();
