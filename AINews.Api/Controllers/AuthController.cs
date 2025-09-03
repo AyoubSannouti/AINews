@@ -3,6 +3,7 @@ using AINews.Application.Features.Authentication.Commands.Register;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AINews.Api.Controllers
 {
@@ -18,29 +19,10 @@ namespace AINews.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterCommand command)
-        {
-            var response = await _mediator.Send(command);
-
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok(response);
-        }
+        public async Task<IActionResult> Register(RegisterCommand command) => Ok(await _mediator.Send(command));
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginCommand command)
-        {
-            var response = await _mediator.Send(command);
+        public async Task<IActionResult> Login(LoginCommand command) => Ok(await _mediator.Send(command));
 
-            if (!response.Success)
-            {
-                return Unauthorized(response);
-            }
-
-            return Ok(response);
-        }
     }
 }

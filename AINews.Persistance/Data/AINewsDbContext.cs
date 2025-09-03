@@ -16,7 +16,6 @@ namespace AINews.Persistance.Data
         {
 
         }
-        public DbSet<User> User { get; set; }
         public DbSet<Article> Article { get; set; }
         public DbSet<Event> Event { get; set; }
         public DbSet<ArticleCategory> ArticleCategory { get; set; }
@@ -26,42 +25,62 @@ namespace AINews.Persistance.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure Domain User relationships
-            modelBuilder.Entity<Article>(entity =>
+            // Article
+            modelBuilder.Entity<Article>(e =>
             {
-                entity.HasKey(a => a.Id);
+                e.ToTable("Article");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Title).HasMaxLength(200).IsRequired();
+                e.Property(x => x.Content).IsRequired();
 
-                entity.HasOne(a => a.Author)
-                    .WithMany(u => u.Articles)
-                    .HasForeignKey(a => a.AuthorId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                // FK: AuthorId -> AspNetUsers (ApplicationUser)
+                e.HasOne<ApplicationUser>()
+                 .WithMany()
+                 .HasForeignKey(x => x.AuthorId)
+                 .HasPrincipalKey(u => u.Id)
+                 .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(a => a.ArticleCategory)
-                    .WithMany()
-                    .HasForeignKey(a => a.CategoryId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                // FK: CategoryId -> ArticleCategory
+                e.HasOne(x => x.ArticleCategory)
+                 .WithMany(c => c.Articles)
+                 .HasForeignKey(x => x.CategoryId)
+                 .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<Event>(entity =>
+            // Event
+            modelBuilder.Entity<Event>(e =>
             {
-                entity.HasKey(e => e.Id);
+                e.ToTable("Event");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Title).HasMaxLength(200).IsRequired();
 
-                entity.HasOne(e => e.CreatedBy)
-                    .WithMany(u => u.Events)
-                    .HasForeignKey(e => e.CreatedById)
-                    .OnDelete(DeleteBehavior.Restrict);
+                // FK: CreatedById -> AspNetUsers (ApplicationUser)
+                e.HasOne<ApplicationUser>()
+                 .WithMany()
+                 .HasForeignKey(x => x.CreatedById)
+                 .HasPrincipalKey(u => u.Id)
+                 .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(e => e.EventCategory)
-                    .WithMany()
-                    .HasForeignKey(e => e.CategoryId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                // FK: CategoryId -> EventCategory
+                e.HasOne(x => x.EventCategory)
+                 .WithMany(c => c.Events)
+                 .HasForeignKey(x => x.CategoryId)
+                 .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // Configure Domain User
-            modelBuilder.Entity<User>(entity =>
+            // Categories
+            modelBuilder.Entity<ArticleCategory>(e =>
             {
-                entity.HasKey(u => u.Id);
-                entity.HasIndex(u => u.Email).IsUnique();
+                e.ToTable("ArticleCategory");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Name).HasMaxLength(100).IsRequired();
+            });
+
+            modelBuilder.Entity<EventCategory>(e =>
+            {
+                e.ToTable("EventCategory");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Name).HasMaxLength(100).IsRequired();
             });
         }
     }
