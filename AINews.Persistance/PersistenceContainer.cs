@@ -79,6 +79,9 @@ namespace AINews.Persistance
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
+            services.AddScoped<IArticleCategoryRepository, ArticleCategoryRepository>();
+            services.AddScoped<IEventCategoryRepository, EventCategoryRepository>();
+
             // Optional: for a CurrentUser service
             services.AddHttpContextAccessor();
 
