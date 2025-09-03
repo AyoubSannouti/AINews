@@ -15,5 +15,7 @@ namespace AINews.Application.Features.Articles.Commands.UpdateArticle
         public string ImageUrl{ get; set; }        
         public DateTime PublishedDate { get; set; }
         public Guid CategoryId { get; set; }
+
+        public Guid AuthorId { get; set; }
     }
 }
