@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AINews.Application.Features.EventCategories.Queries.GetEventCategoriesList
 {
-    internal class GetEventCategoriesListQuery : IRequest<List<EventCategory>>
+    public class GetEventCategoriesListQuery : IRequest<List<EventCategory>>
     {
     }
 }

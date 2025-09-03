@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AINews.Application.Features.ArticleCategories.Queries.GetArticleCategoriesList
 {
-    internal class GetArticleCategoriesListQuery : IRequest<List<ArticleCategory>>
+    public class GetArticleCategoriesListQuery : IRequest<List<ArticleCategory>>
     {
     }
 }
