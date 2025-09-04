@@ -1,6 +1,6 @@
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import dayjs from "dayjs";
-import { EventSummary } from "../api/event";
+import type { EventSummary } from "../api/event";
 import { useNavigate } from "react-router-dom";
 
 export default function EventCard({a}:{a:EventSummary}){

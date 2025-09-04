@@ -1,6 +1,6 @@
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import dayjs from "dayjs";
-import { ArticleSummary } from "../api/article";
+import type { ArticleSummary } from "../api/article";
 import { useNavigate } from "react-router-dom";
 
 export default function ArticleCard({a}:{a:ArticleSummary}){
