@@ -28,3 +28,74 @@ AINews/
 │── AINews.Tests.Integration/ # Integration tests
 │── docker-compose.yml # Multi-container orchestration
 │── README.md # This file 🚀
+
+
+---
+
+## ⚙️ Prerequisites
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+- [Node.js 20+](https://nodejs.org)
+- [Docker](https://www.docker.com/)
+- [SQL Server or PostgreSQL] (depending on your config)
+
+---
+
+## 🛠️ Getting Started
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/<your-username>/AINews.git
+cd AINews
+
+Backend Setup :
+cd AINews.API
+dotnet restore
+dotnet ef database update   # Run migrations
+dotnet run
+
+Frontend Setup :
+cd AINews.Web
+npm install
+npm start
+
+
+Run Test :
+cd AINews.Tests
+dotnet test
+
+Docker Setup :
+Build & Run Bckend :
+docker build -t ainews-api ./AINews.API
+docker run -p 7129:80 ainews-api
+
+
+Build & Run Frontend :
+docker build -t ainews-web ./AINews.Web
+docker run -p 3000:80 ainews-web
+
+Using docker-compose :
+docker-compose up --build
+
+⚡ API Endpoints
+
+POST /api/Auth/register → Register new user
+
+POST /api/Auth/login → Login and get JWT
+
+GET /api/Articles → Get all articles
+
+GET /api/Events → Get all events
+
+GET /api/Auth/me → Get current logged-in user
+
+🧪 Testing Strategy
+
+Unit Tests
+Located in AINews.Tests → Handlers, Commands, Queries.
+
+Integration Tests
+Located in AINews.Tests.Integration → Uses TestWebAppFactory with in-memory server.
+
+
+
+
