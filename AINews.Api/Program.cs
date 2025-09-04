@@ -11,7 +11,16 @@ namespace AINews.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173") // React dev server
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // if you use cookies/auth
+                });
+            });
             // Add services to the container.
             builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApplicationServices();
