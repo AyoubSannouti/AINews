@@ -18,3 +18,13 @@ It includes authentication, category management, admin features, and Dockerized 
 
 ## 📂 Project Structure
 
+AINews/
+│── AINews.API/ # Backend ASP.NET Core Web API
+│── AINews.Application/ # Application Layer (CQRS, Handlers, DTOs)
+│── AINews.Domain/ # Domain Models & Business Logic
+│── AINews.Infrastructure/ # Persistence, Identity, EF Core
+│── AINews.Web/ # React (TypeScript) frontend
+│── AINews.Tests/ # Unit tests
+│── AINews.Tests.Integration/ # Integration tests
+│── docker-compose.yml # Multi-container orchestration
+│── README.md # This file 🚀
