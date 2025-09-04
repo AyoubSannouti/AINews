@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { Box, Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Button, Stack } from "@mui/material";
 import * as ArticleApi from "../api/article";
@@ -6,6 +7,7 @@ import { useAuth } from "../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ArticleCard from "../components/ArticleCard";
 import EventCard from "../components/EventCard";
+import heroImg from "../assets/hero.jpg"; 
 
 export default function Home(){
   const [articleCats, setArticleCats] = React.useState<ArticleApi.ArticleCategory[]>([]);
@@ -27,14 +29,15 @@ export default function Home(){
       {/* Hero */}
       <Box
         sx={{
-          height: 320,
-          backgroundImage: "url(../assets/hero.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#fff",
+            height: 320,
+                backgroundImage: `url(${heroImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#fff",
+                textAlign: "center",  
         }}
       >
         <Stack alignItems="center" spacing={1}>
