@@ -4,6 +4,7 @@ using AINews.Application.Features.EventCategories.Commands.UpdateEventCategory;
 using AINews.Application.Features.EventCategories.Queries.GetEventCategoriesList;
 using AINews.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,13 +29,15 @@ namespace AINews.Api.Controllers
         }
 
         [HttpPost(Name = "AddEventCategory")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateEventCategoryCommand createEventCategoryCommand)
         {
             Guid id = await _mediator.Send(createEventCategoryCommand);
             return Ok(id);
         }
 
-        [HttpPut(Name = "UpdateEventCategory")]
+        [HttpPut("{id:guid}", Name = "UpdateEventCategory")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Update([FromBody] UpdateEventCategoryCommand updateEventCategoryCommand)
         {
             await _mediator.Send(updateEventCategoryCommand);
@@ -42,6 +45,7 @@ namespace AINews.Api.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteEventCategory")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var deleteEventCategoryCommand = new DeleteEventCategoryCommand() { EventCategoryId = id };

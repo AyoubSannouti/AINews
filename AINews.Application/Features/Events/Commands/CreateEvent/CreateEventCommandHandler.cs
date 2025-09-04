@@ -13,26 +13,35 @@ namespace AINews.Application.Features.Events.Commands.CreateEvent
 {
     internal class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, Guid>
     {
+        private readonly IIdentityService _identityService;
         private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
-        public CreateEventCommandHandler(IEventRepository eventRepository, IMapper mapper)
+        public CreateEventCommandHandler(IEventRepository eventRepository, IMapper mapper, IIdentityService identityService)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
+            _identityService = identityService;
         }
         public async Task<Guid> Handle(CreateEventCommand request, CancellationToken cancellationToken)
         {
-            Event eventobj = _mapper.Map<Event>(request);
-            CreateCommandValidator Validator = new CreateCommandValidator();
-            var validationResult = await Validator.ValidateAsync(request);
+            // ✅ get current logged-in user from token
+            var me = await _identityService.GetCurrentUserAsync();
+            if (me == null)
+                throw new UnauthorizedAccessException("User not logged in");
 
-            if (validationResult.Errors.Any())
+            var eventobj = new Event
             {
-                throw new Exception("Event is not valid");
-            }
+                Id = Guid.NewGuid(),
+                Title = request.Title,
+                Description = request.Description,
+                ImageUrl = request.ImageUrl,
+                CategoryId = request.CategoryId,
+                CreatedById = me.Id,
+                EventDate = DateTime.UtcNow,
+                Location = request.Location
+            };
 
-            eventobj = await _eventRepository.AddAsync(eventobj);
-
+            await _eventRepository.AddAsync(eventobj);
             return eventobj.Id;
         }
     }

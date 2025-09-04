@@ -1,4 +1,4 @@
-
+﻿
 using AINews.Application;
 using AINews.Persistance;
 using AINews.Persistance.Identity;
@@ -24,6 +24,23 @@ namespace AINews.Api
             // Add services to the container.
             builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApplicationServices();
+            // 🔹 Add CORS
+            /*builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy.WithOrigins("http://localhost:49339") // React dev server
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // if you use cookies/auth
+                });
+            });*/
+
+            builder.Services.AddCors(o => o.AddPolicy("AllowFrontend", p => p
+            .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()));
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -40,7 +57,8 @@ namespace AINews.Api
             }
 
             IdentitySeeder.SeedAsync(app.Services, builder.Configuration).GetAwaiter().GetResult();
-
+            // 🔹 Use CORS
+            app.UseCors("AllowFrontend");
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
