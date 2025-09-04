@@ -8,6 +8,7 @@ using AINews.Application.Features.Articles.Commands.UpdateArticle;
 using AINews.Application.Features.Articles.Queries.GetArticleDetail;
 using AINews.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,7 @@ namespace AINews.Api.Controllers
         }
 
         [HttpGet("all", Name = "GetAllArticleCategories")]
+
         public async Task<ActionResult<List<ArticleCategory>>> GetAllArticleCategories()
         {
             var articleCategory = await _mediator.Send(new GetArticleCategoriesListQuery());
@@ -32,13 +34,15 @@ namespace AINews.Api.Controllers
         }
 
         [HttpPost(Name = "AddArticleCategory")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateArticleCategoryCommand createArticleCategoryCommand)
         {
             Guid id = await _mediator.Send(createArticleCategoryCommand);
             return Ok(id);
         }
 
-        [HttpPut(Name = "UpdateArticleCategory")]
+        [HttpPut("{id:guid}", Name = "UpdateArticleCategory")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Update([FromBody] UpdateArticleCategoryCommand updateArticleCategoryCommand)
         {
             await _mediator.Send(updateArticleCategoryCommand);
@@ -46,6 +50,7 @@ namespace AINews.Api.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteArticleCategory")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var deleteArticleCategoryCommand = new DeleteArticleCategoryCommand() { ArticleCategoryId = id };

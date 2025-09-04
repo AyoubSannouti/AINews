@@ -1,7 +1,32 @@
+// src/api/category.ts
 import { api } from "./client";
-export const createArticleCategory = (name:string)=>api.post("/api/article-categories",{name});
-export const updateArticleCategory = (id:string,name:string)=>api.put(`/api/article-categories/${id}`,{name});
-export const deleteArticleCategory = (id:string)=>api.delete(`/api/article-categories/${id}`);
-export const createEventCategory   = (name:string)=>api.post("/api/event-categories",{name});
-export const updateEventCategory   = (id:string,name:string)=>api.put(`/api/event-categories/${id}`,{name});
-export const deleteEventCategory   = (id:string)=>api.delete(`/api/event-categories/${id}`);
+
+// ---- types
+export type ArticleCategory = { id: string; name: string };
+export type EventCategory   = { id: string; name: string };
+
+// ---- Article Category endpoints
+export const listArticleCategories = () =>
+  api.get<ArticleCategory[]>("/api/ArticleCategory/all").then(r => r.data);
+
+export const createArticleCategory = (name: string) =>
+  api.post("/api/ArticleCategory", { name }).then(r => r.data);
+
+export const updateArticleCategory = (id: string, name: string) =>
+  api.put(`/api/ArticleCategory/${id}`, { name }).then(r => r.data);
+
+export const deleteArticleCategory = (id: string) =>
+  api.delete(`/api/ArticleCategory/${id}`).then(r => r.data);
+
+// ---- Event Category endpoints (for the other admin tab/page if needed)
+export const listEventCategories = () =>
+  api.get<EventCategory[]>("/api/EventCategory/all").then(r => r.data);
+
+export const createEventCategory = (name: string) =>
+  api.post("/api/EventCategory", { name }).then(r => r.data);
+
+export const updateEventCategory = (id: string, name: string) =>
+  api.put(`/api/EventCategory/${id}`, { name }).then(r => r.data);
+
+export const deleteEventCategory = (id: string) =>
+  api.delete(`/api/EventCategory/${id}`).then(r => r.data);

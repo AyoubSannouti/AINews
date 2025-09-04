@@ -19,7 +19,7 @@ namespace AINews.Application.Features.Articles.Commands.CreateArticle
         }
         public async Task<Guid> Handle(CreateArticleCommand request, CancellationToken cancellationToken)
         {
-            // ✅ get current logged-in user from token
+            // get current logged-in user from token
             var me = await _identityService.GetCurrentUserAsync();
             if (me == null)
                 throw new UnauthorizedAccessException("User not logged in");

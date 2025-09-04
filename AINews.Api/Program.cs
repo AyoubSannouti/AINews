@@ -16,7 +16,7 @@ namespace AINews.Api
             builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApplicationServices();
             // 🔹 Add CORS
-            builder.Services.AddCors(options =>
+            /*builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowFrontend", policy =>
                 {
@@ -25,7 +25,14 @@ namespace AINews.Api
                           .AllowAnyMethod()
                           .AllowCredentials(); // if you use cookies/auth
                 });
-            });
+            });*/
+
+            builder.Services.AddCors(o => o.AddPolicy("AllowFrontend", p => p
+            .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()));
+
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddEndpointsApiExplorer();

@@ -3,17 +3,25 @@ import dayjs from "dayjs";
 import type { EventSummary } from "../api/event";
 import { useNavigate } from "react-router-dom";
 
-export default function EventCard({a}:{a:EventSummary}){
+type Props = { event: EventSummary };
+
+export default function EventCard({ event }: Props) {
   const nav = useNavigate();
+  if (!event) return null; // safety
+
   return (
     <Card>
-      <CardActionArea onClick={()=>nav(`/events/${a.id}`)}>
-        {a.imageUrl && <CardMedia component="img" height="140" image={a.imageUrl} />}
+      <CardActionArea onClick={() => nav(`/events/${event.id}`)}>
+        {event.imageUrl && (
+          <CardMedia component="img" height="140" image={event.imageUrl} alt={event.title} />
+        )}
         <CardContent>
-          <Typography variant="h6">{a.title}</Typography>
-          <Typography variant="body2" color="text.secondary">{a.summary}</Typography>
+          <Typography variant="h6">{event.title}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {event.description}
+          </Typography>
           <Typography variant="caption" display="block">
-            by {a.createdByName || a.createdById} • {dayjs(a.eventDate).format("MMM D, YYYY")}
+            by {event.createdByName || event.createdById} • {dayjs(event.eventDate).format("MMM D, YYYY")}
           </Typography>
         </CardContent>
       </CardActionArea>

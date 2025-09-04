@@ -1,31 +1,89 @@
-import React from "react";
-import { TextField, Button, Stack, List, ListItem, ListItemSecondaryAction, IconButton } from "@mui/material";
-import * as ArticleApi from "../../api/article";
-import * as CatApi from "../../api/category";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// src/pages/admin/ArticleCategories.tsx
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  Button, IconButton, List, ListItem, ListItemSecondaryAction,
+  Stack, TextField
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
+import {
+  listArticleCategories,
+  createArticleCategory,
+  updateArticleCategory,
+  deleteArticleCategory,
+} from "../../api/category"; 
 
-export default function ArticleCategories(){
-  const [cats,setCats]=React.useState<ArticleApi.ArticleCategory[]>([]);
-  const [name,setName]=React.useState("");
-  const load=()=>ArticleApi.listCategories().then(setCats);
-  React.useEffect(load,[]);
+import * as CatApi from "../../api/category";
+type Cat = { id: string; name: string };
+
+export default function ArticleCategories() {
+  const [cats, setCats] = useState<Cat[]>([]);
+  const [name, setName] = useState("");
+
+  const load = useCallback(async () => {
+    const data = await CatApi.listArticleCategories(); // or listCategories()
+    setCats(data);
+  }, []);
+
+ useEffect(() => {
+  (async () => {
+    const data = await listArticleCategories();
+    setCats(data);
+  })();
+}, []);
+
+const create = async () => {
+  if (!name.trim()) return;
+  await createArticleCategory(name.trim());
+  setName("");
+  const data = await listArticleCategories();
+  setCats(data);
+};
+
+const save = async (c: Cat) => {
+  await updateArticleCategory(c.id, c.name);
+  const data = await listArticleCategories();
+  setCats(data);
+};
+
+const remove = async (id: string) => {
+  await deleteArticleCategory(id);
+  const data = await listArticleCategories();
+  setCats(data);
+};
+
+console.log("CatApi keys:", Object.keys(CatApi));
 
   return (
     <Stack spacing={2}>
       <Stack direction="row" spacing={1}>
-        <TextField size="small" label="New category" value={name} onChange={e=>setName(e.target.value)} />
-        <Button variant="contained" onClick={()=>CatApi.createArticleCategory(name).then(()=>{setName("");load();})}>Add</Button>
+        <TextField
+          size="small"
+          label="New category"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <Button variant="contained" onClick={create}>Add</Button>
       </Stack>
-      <List>
-        {cats.map(c=>(
-          <ListItem key={c.id} disableGutters secondaryAction={
-            <>
-              <IconButton onClick={()=>CatApi.updateArticleCategory(c.id,c.name).then(load)}><SaveIcon/></IconButton>
-              <IconButton onClick={()=>CatApi.deleteArticleCategory(c.id).then(load)}><DeleteIcon/></IconButton>
-            </>
-          }>
-            <TextField size="small" value={c.name} onChange={e=>setCats(x=>x.map(y=>y.id===c.id?{...y,name:e.target.value}:y))}/>
+
+      <List dense>
+        {cats.map((c, i) => (
+          <ListItem key={c.id} disableGutters
+            secondaryAction={
+              <Stack direction="row" spacing={1}>
+                <IconButton onClick={() => save(c)}><SaveIcon /></IconButton>
+                <IconButton onClick={() => remove(c.id)}><DeleteIcon /></IconButton>
+              </Stack>
+            }
+          >
+            <TextField
+              size="small"
+              value={c.name}
+              onChange={(e) =>
+                setCats((arr) => arr.map((x, idx) => idx === i ? { ...x, name: e.target.value } : x))
+              }
+            />
           </ListItem>
         ))}
       </List>

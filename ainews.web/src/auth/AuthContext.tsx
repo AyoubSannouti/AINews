@@ -38,19 +38,25 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
 
   const fetchMe = async () => {
-    try {
-      const m = await AuthApi.me();
-      setMe(m);
-    } finally {
-      // If /me fails, we consider the user logged out
-      setLoading(false);
-    }
-  };
+      try {
+    const m = await AuthApi.me();
+        setMe(m);
+      } catch {
+        // 401/404/etc. are fine when not logged-in
+        setMe(null);
+      } finally {
+        setLoading(false);
+      }
+      };
 
   useEffect(() => {
-    const token = localStorage.getItem("ainews.token");
-    if (token) void fetchMe();
-    else setLoading(false);
+      const token = localStorage.getItem("ainews.token");
+          if (token) {
+            // only try /me when we actually have a token
+            void fetchMe();
+          } else {
+            setLoading(false);
+          }
   }, []);
 
   const login = async (email: string, password: string) => {

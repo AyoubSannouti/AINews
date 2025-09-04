@@ -2,6 +2,7 @@
 using AINews.Application.Features.Authentication.Commands.Register;
 using AINews.Application.Features.Authentication.Queries.Me;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -30,8 +31,7 @@ namespace AINews.Api.Controllers
 
         [HttpGet("me")]
         [Authorize]
-        public async Task<ActionResult<MeDto>> Me()
-        => Ok(await _mediator.Send(new AINews.Application.Features.Authentication.Queries.Me.MeQuery()));
+        public async Task<ActionResult<MeDto>> Me() => Ok(await _mediator.Send(new MeQuery()));
 
     }
 }
