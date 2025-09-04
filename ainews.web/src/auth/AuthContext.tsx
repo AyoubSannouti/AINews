@@ -15,7 +15,7 @@ type AuthState = {
   isLoggedIn: boolean;
   isAdmin: boolean;
   login(email: string, password: string): Promise<void>;
-  register(email: string, password: string): Promise<void>;
+  register(email: string, password: string, firstName: string, lastName: string): Promise<void>;
   logout(): void;
 };
 
@@ -58,10 +58,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
     await fetchMe();
   };
 
-  const register = async (email: string, password: string) => {
-    const res = await AuthApi.register(email, password);
-    localStorage.setItem("ainews.token", res.accessToken);
-    await fetchMe();
+const register = async (email: string, password: string, firstName: string, lastName: string) => {
+  const res = await AuthApi.register(email, password, firstName, lastName);
+  localStorage.setItem("ainews.token", res.accessToken);
+  await fetchMe();
   };
 
   const logout = () => {

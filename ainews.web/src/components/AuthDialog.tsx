@@ -33,15 +33,17 @@ export default function AuthDialog({open,onClose}:{open:boolean;onClose:()=>void
         <Tab label="Register" /><Tab label="Login" /><Tab label="Admin" />
       </Tabs>
       <Box p={2}>
-        {tab===0 && (
-          <Box component="form" onSubmit={handle("register")} sx={{mt:1}}>
-            <Stack spacing={2}>
-              <TextField name="email" label="Email" type="email" required />
-              <TextField name="password" label="Password" type="password" required />
-              <Button type="submit" variant="contained">Create account</Button>
-            </Stack>
-          </Box>
-        )}
+            {tab === 0 && (
+              <Box component="form" onSubmit={onRegisterSubmit} sx={{ mt: 1 }}>
+                <Stack spacing={2}>
+                  <TextField name="firstName" label="First Name" required />
+                  <TextField name="lastName" label="Last Name" required />
+                  <TextField name="email" label="Email" type="email" required />
+                  <TextField name="password" label="Password" type="password" required />
+                  <Button type="submit" variant="contained">Create account</Button>
+                </Stack>
+              </Box>
+            )}
         {tab===1 && (
           <Box component="form" onSubmit={handle("login")} sx={{mt:1}}>
             <Stack spacing={2}>
