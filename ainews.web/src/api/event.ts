@@ -7,5 +7,5 @@ export const listCategories = () => api.get<EventCategory[]>("/api/EventCategory
 export const listEvents = (categoryId?:string) =>
   api.get<EventSummary[]>("/api/Event/all", { params: { categoryId }}).then(r=>r.data);
 export const getEvent   = (id:string) => api.get<EventDetail>(`/api/Event/${id}`).then(r=>r.data);
-export const createEvent = (body: {title:string;description:string;imageUrl?:string;location?:string;eventDate:string;categoryId:string}) =>
+export const createEvent = (body: {title:string;description:string;imageUrl?:string;location?:string;eventDate:string;categoryId:string; }) =>
   api.post("/api/Event", body).then(r=>r.data);

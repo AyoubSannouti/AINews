@@ -50,7 +50,7 @@ export default function EventCreate() {
         <TextField label="Description" value={description} onChange={(e) => setDescription(e.target.value)} multiline rows={6} required />
         <Stack direction="row" gap={1}>
           <Button type="submit" variant="contained" disabled={saving}>Publish</Button>
-          <Button variant="outlined" onClick={() => nav(-1 as any)}>Cancel</Button>
+          <Button variant="outlined" onClick={() => nav(-1)}>Cancel</Button>
         </Stack>
       </Stack>
     </Container>

@@ -8,6 +8,6 @@ export const register = (email: string, password: string, firstName: string, las
      .then(r => r.data);
 
 export const login = (email: string, password: string) =>
-  api.post<AuthResultDto>("/api/auth/login", { email, password }).then(r => r.data);
+  api.post<AuthResultDto>("/api/Auth/login", { email, password }).then(r => r.data);
 
-export const me = () => api.get<MeDto>("/api/auth/me").then(r => r.data);
+export const me = () => api.get<MeDto>("/api/Auth/me").then(r => r.data);

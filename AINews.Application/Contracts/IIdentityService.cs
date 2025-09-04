@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AINews.Application.Features.Authentication.Queries.Me;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace AINews.Application.Contracts
 
         Task<(bool Success, string UserId, string Email, string UserName, IEnumerable<string> Errors)>
             LoginAsync(string email, string password);
+
+        Task<MeDto> GetCurrentUserAsync();
     }
 }

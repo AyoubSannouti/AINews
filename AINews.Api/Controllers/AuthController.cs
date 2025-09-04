@@ -1,8 +1,12 @@
 ﻿using AINews.Application.Features.Authentication.Commands.Login;
 using AINews.Application.Features.Authentication.Commands.Register;
+using AINews.Application.Features.Authentication.Queries.Me;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AINews.Api.Controllers
@@ -23,6 +27,11 @@ namespace AINews.Api.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginCommand command) => Ok(await _mediator.Send(command));
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<ActionResult<MeDto>> Me()
+        => Ok(await _mediator.Send(new AINews.Application.Features.Authentication.Queries.Me.MeQuery()));
 
     }
 }
